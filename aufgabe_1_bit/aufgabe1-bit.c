@@ -18,9 +18,8 @@ Z.B. aus der Zahl 0x4020 wird die Zahl 0x2040.
 */
 
 short int switchLowHighByte(short int input) {
-  return ((input & 0xff) << 8) | ((input >> 8) & 0xff);
+    return (input << 8) | (input >> 8);
 }
-
 
 typedef enum {
   Stop = 0,
@@ -48,9 +47,8 @@ Werte des enums Status sollen dabei in das Low Byte und Werte
 des enums Numbers sollen in das High Byte gepackt werden.
 */
 
-
 void serialize(Status s, Numbers n, short int* data) {
-  // Ihre Loesung
+    *data = (short int) (s | (n << 8));
 }
 
 /**
@@ -66,14 +64,16 @@ verpackt wurden.
 */
 
 void deserialize(short int data, Status* s, Numbers* n) {
-  // Ihre Loesung
+    *s = (char) data;
+    *n = (char) (data >> 8);
 }
 
 
 enum TestEnum {
-  OK,
-  FAIL
+  OK = 0,
+  FAIL = !OK
 };
+
 typedef enum TestEnum Test;
 
 Test testLowHigh(short int i) {
@@ -86,10 +86,26 @@ Test testLowHigh(short int i) {
   return t;
 }
 
+Test testSD(Status s, Numbers n) {
+    Test t;
+    short int data;
+    Status s2;
+    Numbers n2;
+    
+    // Test execution
+    serialize(s, n, &data);
+    deserialize(data, &s2, &n2);
+    if(s2 == s && n2 == n) {
+        t = OK;
+    }
+    else {
+        t = FAIL; }
+    return t;
+}
+
 int main() {
-  // Ihre Testroutinen
-
-  short int zahl = 0x2040;
-  printf("%x \n", switchLowHighByte(zahl));
-
+    // Ihre Testroutinen
+    short int zahl = 0x2040;
+    printf("%x \n", switchLowHighByte(zahl));
+    printf("%x \n", testSD(Start, One));
 }
