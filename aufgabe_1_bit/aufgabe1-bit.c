@@ -6,7 +6,6 @@
 #include <stdio.h>
 // Falls notwendig erweitern Sie die Liste der includes
 
-
 /**
    @brief Aufgabe1a: Vertauschen von Bytes
    @param [in] short int i
@@ -18,7 +17,7 @@ Z.B. aus der Zahl 0x4020 wird die Zahl 0x2040.
 */
 
 short int switchLowHighByte(short int input) {
-    return (input << 8) | (input >> 8);
+    return (input << 8) | ((unsigned short int) input >> 8);
 }
 
 typedef enum {
@@ -48,7 +47,7 @@ des enums Numbers sollen in das High Byte gepackt werden.
 */
 
 void serialize(Status s, Numbers n, short int* data) {
-    *data = (short int) (s | (n << 8));
+    *data = (short int) (((unsigned short int) n << 8) | s);
 }
 
 /**
@@ -64,10 +63,12 @@ verpackt wurden.
 */
 
 void deserialize(short int data, Status* s, Numbers* n) {
-    *s = (char) data;
-    *n = (char) (data >> 8);
+    *s = data & 0x00FF;
+    *n = ((unsigned short int) data >> 8);
 }
 
+
+//////// T E S T S ////////
 
 enum TestEnum {
   OK = 0,
@@ -103,9 +104,18 @@ Test testSD(Status s, Numbers n) {
     return t;
 }
 
+
+
 int main() {
     // Ihre Testroutinen
     short int zahl = 0x2040;
+    
+    printf("Aufgabe 1 a:\n");
+    printf("%x \n", zahl);
     printf("%x \n", switchLowHighByte(zahl));
-    printf("%x \n", testSD(Start, One));
+    
+    printf("Aufgabe 1 b :\n");
+    printf("%u \n\n", testSD(Finish, One));
+    
+    return 0;
 }

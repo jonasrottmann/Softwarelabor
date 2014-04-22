@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <strings.h>
 // Falls notwendig erweitern Sie die Liste der includes
 
 /**
@@ -18,31 +19,35 @@
  durch :: getrennt sein koennen. Als Beispiele betrachte man
  
  <p>
+    <ul>
+        <li> "Ha::ll::o"
+        <li> "47::11"
+    </ul>
  
- <ul>
- <li> "Ha::ll::o"
- <li> "47::11"
- </ul>
- 
- Ihre Aufgabe ist es eine Funktion zu schreiben die den
- laengsten suffix (Endung) liefert der kein :: enthaelt.
- Laengste Endungen fuer unsere Beispiele:
- <ul>
- <li> "o"
- <li> "11"
- </ul>
- 
+    Ihre Aufgabe ist es eine Funktion zu schreiben die den
+    laengsten suffix (Endung) liefert der kein :: enthaelt.
+    Laengste Endungen fuer unsere Beispiele:
+    <ul>
+        <li> "o"
+        <li> "11"
+    </ul>
  <p>
  
  Input ist der String (char pointer), das Ergebnis soll als
  return Wert geliefert werden, welcher ein Zeiger auf den
  Anfang der laengsten Endung ohne :: ist.
- 
  */
-
 char* extract(char* input) {
-    
-    return input; // Ihre Loesung
+    if( strlen(input) ) {                                   // Prüfe ob input nicht leer ist (wenn leer, dann if(0) -> false)
+        unsigned short int i = strlen(input) - 1;                    // i ist der Index des letzten Zeichen
+        while(i > 0) {                                      // solange i größer 0 (solange i nicht das erste Zeichen ist)
+            if(input[i] == ':' && input[i - 1] == ':') {    // Wenn zwei ':' auf einander folgen
+                return input + i + 1;                       // + 1, weil i der Index des hinteren ':' ist
+            }
+            i--;
+        }
+    }
+    return input;
 }
 
 /**
@@ -53,11 +58,10 @@ char* extract(char* input) {
  Das Ergebnis soll hier nicht als return Wert geliefert werden.
  Anstatt wird ein pointer auf einen pointer verwendet.
  Wieso reicht ein pointer nicht aus?
- */
+*/
 
 void extract2(char* input, char** output) {
-    // Ihre Loesung
-    
+    *output = extract(input);
 }
 
 /**
@@ -76,8 +80,19 @@ void extract2(char* input, char** output) {
  */
 
 int count(char* input) {
+    unsigned short int i = 0;
+    unsigned short int countWords = 0;
     
-    return 1; // Muss durch Ihre Loesung ersetzt werden
+    while(i < strlen(input)) {
+        if(input[i] != ' ') {           //Anfang eines Wortes finden
+            while(input[i] != ' ') {
+                i++;                    //Zum ersten Zeichen nach Ende des Wortes springen
+            }
+            countWords++;               //Wort zählen
+        }
+        i++;
+    }
+    return countWords;
 }
 
 
@@ -98,27 +113,68 @@ int count(char* input) {
  */
 
 int breakIntoWords(char *line, int maxwords, char *words[]) {
+    char *p = line; // Pointer aufs erste Zeichen der Zeile
+    unsigned short int countwords = 0;
     
-    return 1; // Ihre Loesung
+    while(countwords < maxwords) {
+        while (*p == ' ') { // Gehe mit p weiter bis zum ersten "Nicht-Leerzeichen"
+            p++;
+        }
+        if (*p == '\0') { // Ende der Zeile erreicht
+            return countwords;
+        }
+        // Jetzt: Erstes "Nicht-Leerzeichen", was nicht das Ende der Zeile ist
+        char *q = p;
+        while(*q != ' ' && *q != '\0') {
+            q++;
+        }
+        if(*q == '\0') { // Ende der Zeile schon erreicht => Letztes Wort der Zeile speichern
+            words[countwords] = p; //Füge Wort dem Array hinzu
+            countwords++;
+            return countwords;
+        }
+        *q = '\0'; // Setze Nullzeichen am Ende des Wortes
+        
+        words[countwords] = p; //Füge Wort dem Array hinzu
+        countwords++;
+        
+        p = q; //Setze p auf des Nullzeichen
+        p++;
+    }
+    return countwords;
 }
 
 
 int main() {
     // Ihre Testroutinen
+    char* test_a = "Ha::ll::oo";
+    char* test_c = " Das  funktioniert  ja suuuper !";
+    char* output;
     
-    printf(extract("Hallo"));
+    //2a
+    printf("Aufgabe 2 a : '%s'\n", extract(test_a));
     
-    /* Beispieltest fuer Aufgabe2d
+    //2b
+    extract2(test_a, &output);
+    printf("Aufgabe 2 b : '%s'\n", output);
+    
+    //2c
+    
+    printf("Aufgabe 2 c : '%s' - Anzahl der Wörter %i\n", test_c, count(test_c));
+    
+    
+    printf("Aufgabe 2 d : \n");
+    /* Beispieltest fuer Aufgabe2d */
      char line[] = "this is a test";
      int i;
      int nwords;
      char* words[10];
      
-     nwords = breakIntoWords(line, words, 10);
+     nwords = breakIntoWords(line, 10, words);
      for(i = 0; i < nwords; i++)
-     printf("%s\n", words[i]);
+         printf("%s\n", words[i]);
      
-     soll liefern
+     /*soll liefern
      
      this
      is
@@ -126,4 +182,6 @@ int main() {
      test
      
      */
+    
+    return 0;
 }

@@ -31,6 +31,20 @@ int main(int argc, const char * argv[])
     *p = 0;
     printf("%ld\n", i);
     
+    
+    //09. April
+    int *p;
+    int **q;
+    int x;
+    int y;
+    
+    
+    q = &p;
+    p = &x;
+    **q = 1; //Dereferenzierung
+    p = &y;
+    **q = 2;
+    
     return 0;
 }
 
