@@ -7,7 +7,8 @@
 //
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
+
 // Falls notwendig erweitern Sie die Liste der includes
 
 /**
@@ -38,8 +39,8 @@
  Anfang der laengsten Endung ohne :: ist.
  */
 char* extract(char* input) {
-    if( strlen(input) ) {                                   // Prüfe ob input nicht leer ist (wenn leer, dann if(0) -> false)
-        unsigned short int i = strlen(input) - 1;                    // i ist der Index des letzten Zeichen
+    if( strlen(input) > 0) {                                   // Prüfe ob input nicht leer ist (wenn leer, dann if(0) -> false)
+        unsigned short int i = strlen(input) - 1;           // i ist der Index des letzten Zeichen
         while(i > 0) {                                      // solange i größer 0 (solange i nicht das erste Zeichen ist)
             if(input[i] == ':' && input[i - 1] == ':') {    // Wenn zwei ':' auf einander folgen
                 return input + i + 1;                       // + 1, weil i der Index des hinteren ':' ist
@@ -85,7 +86,7 @@ int count(char* input) {
     
     while(i < strlen(input)) {
         if(input[i] != ' ') {           //Anfang eines Wortes finden
-            while(input[i] != ' ') {
+            while(input[i] != ' ' && input[i] != '\0') {
                 i++;                    //Zum ersten Zeichen nach Ende des Wortes springen
             }
             countWords++;               //Wort zählen
@@ -117,29 +118,27 @@ int breakIntoWords(char *line, int maxwords, char *words[]) {
     unsigned short int countwords = 0;
     
     while(countwords < maxwords) {
-        while (*p == ' ') { // Gehe mit p weiter bis zum ersten "Nicht-Leerzeichen"
+        while (*p == ' ' && *p != '\0') { // Gehe mit p weiter bis zum ersten "Nicht-Leerzeichen"
             p++;
         }
         if (*p == '\0') { // Ende der Zeile erreicht
             return countwords;
         }
-        // Jetzt: Erstes "Nicht-Leerzeichen", was nicht das Ende der Zeile ist
+                            // Jetzt: Erstes "Nicht-Leerzeichen", was nicht das Ende der Zeile ist
         char *q = p;
-        while(*q != ' ' && *q != '\0') {
+        while(*q != ' ' && *q != '\0') { //Suche Ende des Wortes
             q++;
         }
         if(*q == '\0') { // Ende der Zeile schon erreicht => Letztes Wort der Zeile speichern
-            words[countwords] = p; //Füge Wort dem Array hinzu
-            countwords++;
             return countwords;
         }
-        *q = '\0'; // Setze Nullzeichen am Ende des Wortes
-        
+        else {
+            *q = '\0'; // Setze Nullzeichen am Ende des Wortes
+            p = q; // Setze p auf des Nullzeichen
+            p++;
+        }
         words[countwords] = p; //Füge Wort dem Array hinzu
         countwords++;
-        
-        p = q; //Setze p auf des Nullzeichen
-        p++;
     }
     return countwords;
 }
@@ -148,24 +147,23 @@ int breakIntoWords(char *line, int maxwords, char *words[]) {
 int main() {
     // Ihre Testroutinen
     char* test_a = "Ha::ll::oo";
-    char* test_c = " Das  funktioniert  ja suuuper !";
-    char* output;
+    char* test_c = " Das  funktioniert  ja wunderbar !";
+    char** output = &test_a;
     
     //2a
     printf("Aufgabe 2 a : '%s'\n", extract(test_a));
     
     //2b
-    extract2(test_a, &output);
-    printf("Aufgabe 2 b : '%s'\n", output);
+    extract2(test_a, output);
+    printf("Aufgabe 2 b : '%s'\n", *output);
     
     //2c
+    printf("Aufgabe 2 c : '%s' - Anzahl der Wörter %i \n", test_c, count(test_c));
     
-    printf("Aufgabe 2 c : '%s' - Anzahl der Wörter %i\n", test_c, count(test_c));
-    
-    
+    //2d
     printf("Aufgabe 2 d : \n");
-    /* Beispieltest fuer Aufgabe2d */
-     char line[] = "this is a test";
+    //Beispieltest fuer Aufgabe2d
+     char line[] = " hello this is a test ";
      int i;
      int nwords;
      char* words[10];
@@ -173,7 +171,6 @@ int main() {
      nwords = breakIntoWords(line, 10, words);
      for(i = 0; i < nwords; i++)
          printf("%s\n", words[i]);
-     
      /*soll liefern
      
      this
@@ -182,6 +179,7 @@ int main() {
      test
      
      */
+    printf("Anzahl Wörter: %i\n", nwords);
     
     return 0;
 }
