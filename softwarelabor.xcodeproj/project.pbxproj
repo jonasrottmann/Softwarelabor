@@ -485,7 +485,7 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 			};
-			buildConfigurationList = DD1CFF8318E328E100ECADCF /* Build configuration list for PBXProject "softwarelabor_c" */;
+			buildConfigurationList = DD1CFF8318E328E100ECADCF /* Build configuration list for PBXProject "softwarelabor" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1252,7 +1252,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DD1CFF8318E328E100ECADCF /* Build configuration list for PBXProject "softwarelabor_c" */ = {
+		DD1CFF8318E328E100ECADCF /* Build configuration list for PBXProject "softwarelabor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD1CFF8418E328E100ECADCF /* Debug */,
@@ -1340,6 +1340,7 @@
 				DD77FAFB192CCE5C0008CE7A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

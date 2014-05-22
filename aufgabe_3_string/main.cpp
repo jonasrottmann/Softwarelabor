@@ -29,7 +29,7 @@ private:
     }
     
 public:
-    //Konstruktor Standard
+    //Standardkonstruktor
     String()
     {
         size = 0;
