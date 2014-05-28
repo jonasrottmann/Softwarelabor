@@ -182,7 +182,7 @@ public:
         {
             return r1;
         }
-        
+
         // 6. `r1 + r2 ==> r2` falls `L(r1)={}`
         if(r1->isPhi())
         {
