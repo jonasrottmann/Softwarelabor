@@ -54,11 +54,6 @@ bool testClosureTransform(RE* r, string s) {
     bool b2 = match(r,s);
     bool b = b1 == b2;
     
-    cout << "fsa.run: " << b1 << endl;
-    
-    cout << "deriv: " << b2 << endl;
-
-    
     cout << "Test case: " << r->pretty() << "   " << s << "\n";
     cout << "Test result: " << b << endl;
     
@@ -131,22 +126,20 @@ int main()
     
     //TESTE TEIL 2 UND 3
     cout << "---------- TEIL 2 UND 3 ----------" << endl;
-    RE* r14 = new Conc(new Alt(new Ch('a'), new Ch('b')), new Ch('a'));
-
-    NFA test = transformWorker(r14);
+    RE* r14 = new Conc(new Alt(new Ch('a'), new Ch('b')), new Ch('c'));
+    testClosureTransform(r14, "x");
     
-    cout << "Initial: " << test.getInitial() << endl;
-    
-    for(int i = 0; i< test.getFinals().size(); i++ ) {
-        cout << "Finals: " << test.getFinals()[i] << endl << endl << "Transitions: " << endl;
-    }
-    
-    for(int i = 0; i< test.getTransitions().size(); i++ ) {
-        cout << "From: " << test.getTransitions()[i].getFrom() << endl;
-        cout << "-With: " << (char) test.getTransitions()[i].getChar() << endl;
-        cout << "To: " << test.getTransitions()[i].getTo() << endl;
-        cout << "-----" << endl;
-    }
-    
-    //testClosureTransform(r14, "aa");
+    //Conc test
+    //    NFA test = transformWorker(r14);
+    //    cout << "Initial: " << test.getInitial() << endl;
+    //    for(int i = 0; i< test.getFinals().size(); i++ ) {
+    //        cout << "Finals: " << test.getFinals()[i] << endl << endl << "Transitions: " << endl;
+    //    }
+    //    for(int i = 0; i< test.getTransitions().size(); i++ ) {
+    //        cout << "From: " << test.getTransitions()[i].getFrom() << endl;
+    //        cout << "-With: " << (char) test.getTransitions()[i].getChar() << endl;
+    //        cout << "To: " << test.getTransitions()[i].toState() << endl;
+    //        cout << "Is Epsilon: " << test.getTransitions()[i].isEpsilonTransition() << endl;
+    //        cout << "-----" << endl;
+    //    }
 }

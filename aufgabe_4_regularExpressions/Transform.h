@@ -122,7 +122,7 @@ NFA transformWorker(RE *r)
             ts.insert(ts.end(),t2.begin(),t2.end());   //hänge alle elemente aus t2 an ts an
             
             ts.push_back(Transition(start, n1_start));
-            ts.push_back(Transition(n1_stop, n2_start));
+            ts.push_back(Transition(n1_stop, n2_start)); //Fehler?!
             ts.push_back(Transition(n2_stop, stop));
             
             return NFA(ts,start,stop);

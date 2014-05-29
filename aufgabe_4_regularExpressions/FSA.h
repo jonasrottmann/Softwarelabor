@@ -56,9 +56,6 @@ public:
     int getFrom() {
         return from;
     }
-    int getTo() {
-        return to;
-    }
     int getChar() {
         return c;
     }
@@ -137,47 +134,21 @@ bool FSA::isFinal()
     return false;
 }
 
-void FSA::debugout() {
-    for (int i= 0; i < current.size(); i++) {
-        cout << "i:" << i << " current.size(" << i << "): " << current[i] << endl;
-    }
-    for(int i=0; i < ts.size(); i++) // durchlaeuft alle Uebergaenge
-    {
-        cout << "i:" << i << " transition to: " << ts[i].toState() << endl;
-    }
-    for(int i=0; i < final.size(); i++) {
-        cout << "final(" << i << "): " << final[i] << endl;
-    }
-}
-
 void FSA::closure() //sammselt alle zustände in current, die vom aktuellen zustand mit epsilon-transitions erreichbar sind
 {
-    vector<int> old_current;
-    int terminate = 0;
-    
-    
-    //cout << current.size() << endl;
-    
-    do
+    for(int i = 0; i < current.size(); i++) //durchläuft alle zustände in current
     {
-        old_current = current;
-        
-        for(int i=0; i < ts.size() && !terminate; i++) // durchlaeuft alle Uebergaenge
+        for(int j=0; j < ts.size(); j++)  //alle übergänge durchlaufen
         {
-            for (int j=0; j < current.size() && !terminate; j++)  // durchlaeuft alle aktiven Zustaende
+            if(ts[j].trigger(current[i])) //übergang startet von hier
             {
-                if(ts[i].trigger(current[j]) && find(current.begin(),current.end(),ts[i].toState()) == current.end())
+                if(find(current.begin(),current.end(),ts[j].toState()) == current.end()) // Übergang noch nicht in current
                 {
-                    current.push_back(ts[i].toState());
-                    terminate = 1;
+                    current.push_back(ts[j].toState()); //ziel des übergangs zu current hinzufügen
                 }
             }
         }
-        
-    } while (old_current != current);
-    
-    //cout << current.size() << "--" << endl;
-    //debugout();
+    }
 }
 
 void FSA::step(char c)
