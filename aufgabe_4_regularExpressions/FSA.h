@@ -134,7 +134,7 @@ bool FSA::isFinal()
     return false;
 }
 
-void FSA::closure() //sammselt alle zustände in current, die vom aktuellen zustand mit epsilon-transitions erreichbar sind
+void FSA::closure() //sammelt alle zustände in current, die vom aktuellen zustand mit epsilon-transitions erreichbar sind
 {
     for(int i = 0; i < current.size(); i++) //durchläuft alle zustände in current
     {

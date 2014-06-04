@@ -17,6 +17,7 @@ private:
     int size;
     char* str;
 
+    
     template <class T>
     void copy(T &source, char* dest, int count, int offset)
     {
@@ -86,7 +87,7 @@ public:
     }
     
     //Overload +=
-    void operator +=(String &s)
+    String& operator +=(String &s)
     {
         int newsize = size + s.getSize();
         char* newstr = new char[newsize + 1];
@@ -95,18 +96,23 @@ public:
         copy(s, newstr, newsize, size);
         
         size = newsize;
+        
         delete[] str;
         str = newstr;
+        
+        return *this;
     }
     
     //Overload =
-    void operator =(String &s)
+    String& operator =(String &s)
     {
         char* newstr = new char[s.getSize() + 1];
         delete[] str;
-        str = newstr;
+        this->str = newstr;
         size = s.getSize();
         copy(s, str, size, 0);
+        
+        return *this;
     }
     
     // make friend, so we can access private members
@@ -127,10 +133,19 @@ ostream& operator<< (ostream &out, String &s)
 int main(int argc, const char * argv[])
 {
     //Todo: Tests
-    String s2("Test");
-    String s3(s2);
+    String s0('c');
+    String s1;
+    String s2;
+    String s3("Hallo");
+        
+    s1 = s2 = s3;
     
-    s3 = s2;
+    //s2 += s2;
     
+    //cout << s0 << endl;
+    cout << s1 << endl;
+    cout << s2 << endl;
     cout << s3 << endl;
+    //cout << s3[3] << endl;
+    
 };

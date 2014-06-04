@@ -12,13 +12,13 @@ using namespace std;
 
 /*
  Vereinfachungsregeln:
- (1) eps r ==> r                                    IMPLEMENTIERT
- (2) r1 r2 ==> phi falls L(r1)=phi oder L(r2)=phi   IMPLEMENTIERT
- (3) r* ==> eps falls L(r)=phi                      *
- (4) (r*)* ==> r*                                   *
- (5) r + r ==> r                                    IMPLEMENTIERT
- (6) r1 + r2 ==> r2 falls L(r1)=phi                 *
- (7) r1 + r2 ==> r1 falls L(r2)=phi                 *
+ (1.) eps r ==> r                                    SELBST IMPLEMENTIERT
+ (2.) r1 r2 ==> phi falls L(r1)=phi oder L(r2)=phi   SELBST IMPLEMENTIERT
+ (3.) r* ==> eps falls L(r)=phi                      *
+ (4.) (r*)* ==> r*                                   *
+ (5.) r + r ==> r                                    SELBST IMPLEMENTIERT
+ (6.) r1 + r2 ==> r2 falls L(r1)=phi                 *
+ (7.) r1 + r2 ==> r1 falls L(r2)=phi                 *
 */
 
 // Vorwaertzreferenz
@@ -26,7 +26,6 @@ class RE;
 
 // Prototypen von Hilfsfunktionen
 bool equals(RE* r1, RE* r2);
-
 
 enum REType
 {
@@ -250,19 +249,23 @@ public:
         // Then, check if any of the simplification rules are applicable
         
         // 1. eps r ==> r
-        if(equals(r1, new Eps()))
+        if(r1->ofType() == EpsType)
         {
             return r2;
         }
-        if(equals(r2, new Eps()))
+        if(r2->ofType() == EpsType)
         {
             return r1;
         }
         
         // 2. r1 r2 ==> phi falls L(r1)={} oder L(r2)={}
-        if( equals(r1, new Phi()) || equals(r2, new Phi()))
+        if(r1->ofType() == PhiType)
         {
-            return new Phi();
+            return r1;
+        }
+        if(r2->ofType() == PhiType)
+        {
+            return r2;
         }
         
         return this;
@@ -304,6 +307,7 @@ public:
     }
     RE* simp()
     {
+        
         // Simplify subparts
         r = r->simp();
 
